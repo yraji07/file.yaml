@@ -1,0 +1,128 @@
+---
+- name: install wildfly centos
+  become: yes
+  hosts: all
+  tasks: 
+    - name: install java 
+      ansible.builtin.yum:
+        name: java-1.8.0-openjdk-devel
+        update_cache: yes 
+        state: present
+    - name: addging group
+      ansible.builtin.group:
+        name: wildfly
+        state: present 
+    - name: creating a user 
+      ansible.builtin.user: 
+        name: wildfly
+        create_home: yes
+        group: wildfly 
+        shell: /sbin/nologin
+        state: present 
+    - name: creating a directory
+      ansible.builtin.file: 
+        name: /tmp 
+        state: directory
+    - name: Download wildfly from a file path
+      ansible.builtin.get_url:
+        url: https://github.com/wildfly/wildfly/releases/download/27.0.1.Final/wildfly-27.0.1.Final.tar.gz
+        dest: /tmp
+    - name: Unarchive a file 
+      ansible.builtin.unarchive:
+        src: /tmp/wildfly-27.0.1.Final.tar.gz 
+        dest: /tmp
+        remote_src: yes
+    - name: Create a symbolic link
+      ansible.builtin.copy:
+        src: /tmp/wildfly-27.0.1.Final/
+        dest: /opt/wildfly
+        owner: wildfly
+        group: wildfly
+        remote_src: yes 
+    - name: Changing a directory ownership permissions
+      ansible.builtin.file:
+        path: /opt/wildfly
+        owner: wildfly
+        group: wildfly
+        state: directory 
+    - name: Create a directory 
+      ansible.builtin.file:
+        path: /etc/wildfly
+        state: directory
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: /opt/wildfly/docs/contrib/scripts/systemd/wildfly.conf
+        dest: /etc/wildfly/
+        owner: wildfly
+        group: wildfly
+        remote_src: yes
+    - name: Copy launch sh script
+      ansible.builtin.copy:
+        src: /opt/wildfly/docs/contrib/scripts/systemd/launch.sh
+        dest: /opt/wildfly/bin/
+        owner: wildfly
+        group: wildfly
+        remote_src: yes
+    - name: shell command execution
+      ansible.builtin.shell: sh -c 'chmod +x /opt/wildfly/bin/*.sh'
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: /opt/wildfly/docs/contrib/scripts/systemd/wildfly.service
+        dest: /etc/systemd/system/
+        owner: wildfly
+        group: wildfly 
+        remote_src: yes
+    - name: reload the system
+      ansible.builtin.systemd:
+        name: wildfly
+        state: started
+        daemon-reload: yes
+        enabled: yes 
+
+
+
+
+
+    - name: changing directory ownership permissions
+    ansible.builtin.file:
+      path: /opt/wildfly
+      owner: wildfly
+      group: wildfly
+      state: directory
+  - name: creating directory file
+    ansible.builtin.file:
+      path: /etc/wildfly
+      state: directory
+  - name: Copy conf file with owner and permissions
+    ansible.builtin.copy:
+      src: /opt/wildfly/docs/contrib/scripts/systemd/wildfly.conf
+      dest: /etc/wildfly/
+      owner: wildfly
+      group: wildfly
+      remote_src: yes
+  - name: Copy launch file with owner and permissions
+    ansible.builtin.copy:
+      src: /opt/wildfly/docs/contrib/scripts/systemd/launch.sh
+      dest: /opt/wildfly/bin/
+      owner: wildfly
+      group: wildfly
+      remote_src: yes
+  - name: executing shell command
+    ansible.builtin.shell: sh -c 'chmod +x /opt/wildfly/bin/*.sh'
+  - name: Copy service file
+    ansible.builtin.copy:
+      src: /opt/wildfly/docs/contrib/scripts/systemd/wildfly.service
+      dest: /etc/systemd/system/
+      owner: wildfly
+      group: wildfly
+      remote_src: yes
+  - name: reload the system
+    ansible.builtin.systemd:
+      name: wildfly
+      daemon_reload: yes
+      state: started
+      enabled: yes
+
+
+
+

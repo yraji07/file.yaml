@@ -1,0 +1,40 @@
+---
+- name: jenkins instalation
+  hosts: all
+  become: yes
+  tasks: 
+    - name: java installation
+      ansible.builtin.apt: 
+        name: openjdk-11-jdk
+        update_cache: yes
+        state: present
+    - name: download jenkins 
+      ansible.builtin.get_url: 
+        url: https://updates.jenkins.io/download/war/2.385/jenkins.war
+        dest: /home/raji/ 
+    - name: edit the service file
+      ansible.builtin.copy: 
+        src: jenkins.service
+        dest: /lib/systemd/system/jenkins.service
+        remote_src: yes
+    - name: start jenkins.service 
+      ansible.builtin.systemd:
+        name: jenkins.service
+        state: started
+        enabled: yes
+
+
+
+
+
+
+
+
+
+
+    sudo apt update
+sudo apt install openjdk-11-jdk
+sudo wget https://updates.jenkins.io/download/war/2.385/jenkins.war
+sudo vi /lib/systemd/system/jenkins.service    # change the service file 
+sudo systemctl start jenkins.service
+sudo systemctl enable jenkins.service

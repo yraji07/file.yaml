@@ -1,0 +1,7 @@
+---
+- name: postgresql
+  become: yes
+  hosts: all 
+  roles: 
+    - name: postgresql 
+      role: geerlingguy.postgresql

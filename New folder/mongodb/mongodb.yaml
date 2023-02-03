@@ -1,0 +1,6 @@
+---
+- name: install mongodb on ubuntu 20.4
+  hosts: all
+  become: yes
+  tasks: 
+    - name: 

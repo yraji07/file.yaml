@@ -1,0 +1,34 @@
+---
+- name: lampstack installation
+  hosts: all
+  become: yes
+  tasks: 
+    - name: apache2 installation
+      ansible.builtin.apt:
+        name: apache2
+        update_cache: yes
+        state: present
+    - name: install php 
+      ansible.builtin.apt:
+        name: php
+        update_cache: yes
+        state: present
+    - name: install libapache2-mod-php
+      ansible.builtin.apt:
+        name: libapache2-mod-php
+        update_cache: yes
+        state : present
+    - name: php-mysql
+      ansible.builtin.apt:
+        name: php-mysql
+        update_cache: yes
+        state : present
+    - name: copy a file 
+      ansible.builtin.copy:
+      dest: /var/www/info.php
+      content: <?php
+            php info()
+            ?>
+        
+
+        

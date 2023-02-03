@@ -1,0 +1,14 @@
+---
+- name: installing tomcat on ubuntu
+  hosts: all
+  become: yes
+  tasks: 
+  - name: install java 
+    ansible.builtin.apt: 
+      name: openjdk-11-jdk
+      update_cache: yes 
+      state: present
+  - name: Download Apache Tomcat
+    ansible.builtin.get_url: 
+    url: https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.8/bin/apache-tomcat-10.0.8.tar.gz
+    dest: 
