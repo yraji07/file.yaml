@@ -1,0 +1,40 @@
+---
+- name: nopcommerce installation 
+  hosts: all
+  become: yes
+  tasks: 
+    - name:
+      apt: 
+    - name: 
+      get_url: wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+      update_cache: yes 
+    - name:
+      dpkg_selections:
+        name: 
+        selection: install
+    - name: install .NET Core Runtime
+      package: 
+        name: 
+          - apt-transport-https
+          - aspnetcore-runtime-7.0
+    - name: installing nginx
+      ansible.builtin.apt: 
+        name: nginx
+        update_cache: yes
+        state: present 
+    - name: start, status
+      systemd: 
+        name: nginx
+    - name: status, started
+      ansible.builtin.systemd:
+        name: nginx
+        state: started 
+    - name: create a directory 
+      file: 
+        path: /var/www/nopCommerce
+    - name: Download and unpack nopCommerce 
+      unarchive:
+        url: wget https://github.com/nopSolutions/nopCommerce/releases/download/release-4.60.2/nopCommerce_4.60.2_NoSource_linux_x64.zip    
+    - 
+
+
